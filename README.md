@@ -1,14 +1,37 @@
-> ![MikroE](http://www.mikroe.com/img/designs/beta/logo_small.png)
-> #Flash 2 Click#
-> ##By [MikroElektronika](http://www.mikroe.com)
+![MikroE](http://www.mikroe.com/img/designs/beta/logo_small.png)
+
+![Flash 2 Click](http://cdn.mikroe.com/img/banners/news/2016/05/flash-2-click-banner-news.png)
+
+---
+[Product Page](http://www.mikroe.com/click/flash-2/)
+
+[Manual Page](http://docs.mikroe.com/Flash_2_click)
+
+[Learn Page](http://learn.mikroe.com/this-nand-nor-that-nand/)
+
 ---
 
-## Installation
-Use the package manager to install the library for your architecture.
+### General Description
 
-###Example on ARM
+Flash 2 click is a mikroBUS™ add-on board for adding more Flash Memory to your target board microcontroller. It carries Microchip’s SST26VF064B flash-memory module with 64 Mbits capacity. It’s a highly reliable module with a specified minimum of 100,000 read and write cycles and with over 100 years of Data Retention. For data security, the module features a One-Time Programmable (OTP) 2 KB bit secure ID and a 64 bit unique, factory pre-programmed identifier. Additional software security measures include inidividual-block write Protection with permanent lock-down capability. Flash 2 click communicates with the target MCU through the mikroBUS™ SPI interface (CS#, SCK, MISO, MOSI) with additional functionality provided by the #HOLD pin (in place of default mikroBUS™ RST pin). The board is designed to use a 3.3V power supply.
+
+---
+
+### Example
+
+#### Configuration
+* MCU:             STM32F107VC
+* Dev.Board:       EasyMx Pro v7
+* Oscillator:      72 Mhz internal
+* Ext. Modules:    CLICKNAME click
+* SW:              MikroC PRO for ARM 4.7.4
+
 ```
 #include <stdint.h>
+
+/*      Functions
+ ****************************/
+
 
 sbit FLASH_2_WP at GPIOA_ODR.B0;
 sbit FLASH_2_CS at GPIOD_ODR.B13;
@@ -32,10 +55,6 @@ void setup()
 
 }
 
-```
-
-```
-// Main function
 
 int main(void)
 {
@@ -49,5 +68,3 @@ int main(void)
 
 }
 ```
-
-

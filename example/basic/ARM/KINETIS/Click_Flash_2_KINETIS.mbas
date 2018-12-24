@@ -1,0 +1,85 @@
+'
+'Example for Flash_2 Click
+'
+'    Date          : jan 2018.
+'    Author        : MikroE Team
+'
+'Test configuration KINETIS :
+'    
+'    MCU              : MK64
+'    Dev. Board       : HEXIWEAR
+'    ARM Compiler ver : v6.0.0.0
+'
+'---
+'Description :
+'
+'The application is composed of three sections :
+'
+'- System Initialization - GPIO and SPI module Initalization 
+'- Application Initialization - Flash Driver Initialization, initialization of click by setting mikorBUS to
+'  approprieate logic levels, performing global block unlock and chip erase functions.
+'- Application Task - Writing data to click memory and displaying the read data via UART. 
+'
+'
+program Click_Flash_2_KINETIS
+
+include Click_Flash_2_types
+include Click_Flash_2_config
+
+dim
+    wrData as char[10] 
+    rdData as char[10] 
+    
+sub procedure systemInit() 
+
+    mikrobus_gpioInit(_MIKROBUS1, _MIKROBUS_CS_PIN, _GPIO_OUTPUT) 
+    mikrobus_gpioInit(_MIKROBUS1, _MIKROBUS_PWM_PIN, _GPIO_OUTPUT) 
+    mikrobus_gpioInit(_MIKROBUS1, _MIKROBUS_RST_PIN, _GPIO_OUTPUT) 
+    mikrobus_spiInit(_MIKROBUS1, @_FLASH2_SPI_CFG[0]) 
+    mikrobus_logInit(_MIKROBUS2, 9600) 
+    Delay_ms(100) 
+
+end sub
+
+sub procedure applicationInit() 
+
+    flash2_spiDriverInit(T_FLASH2_P(@_MIKROBUS1_GPIO), T_FLASH2_P(@_MIKROBUS1_SPI)) 
+    flash2_init() 
+    Delay_ms(300) 
+    flash2_globalBlockUnlock() 
+    Delay_ms(400) 
+    flash2_chipErase() 
+    Delay_ms(300) 
+
+end sub
+
+sub procedure applicationTask() 
+
+    mikrobus_logWrite("Writing MikroE to  Flash memory, from address 0x015015:", _LOG_LINE) 
+    flash2_write(0x015015, @wrData[0], 9) 
+    mikrobus_logWrite("Reading 9 bytes of Flash memory, from address 0x015015:", _LOG_LINE) 
+    flash2_read(0x015015, @rdData[0], 9) 
+    mikrobus_logWrite("Data read: ", _LOG_TEXT) 
+    mikrobus_logWrite(rdData, _LOG_LINE) 
+    Delay_ms(1000) 
+
+end sub
+
+main :
+    wrData[0] = "M"
+    wrData[1] = "i"
+    wrData[2] = "k"
+    wrData[3] = "r"
+    wrData[4] = "o"
+    wrData[5] = "E"
+    wrData[6] = 13
+    wrData[7] = 10
+    wrData[8] = 0
+
+    systemInit() 
+    applicationInit() 
+    while (1) 
+        applicationTask() 
+    wend
+
+end.

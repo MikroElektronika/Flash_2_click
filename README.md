@@ -1,70 +1,95 @@
 ![MikroE](http://www.mikroe.com/img/designs/beta/logo_small.png)
 
-![Flash 2 Click](http://cdn.mikroe.com/img/banners/news/2016/05/flash-2-click-banner-news.png)
-
----
-[Product Page](http://www.mikroe.com/click/flash-2/)
-
-[Manual Page](http://docs.mikroe.com/Flash_2_click)
-
-[Learn Page](http://learn.mikroe.com/this-nand-nor-that-nand/)
-
 ---
 
-### General Description
+# Flash_2 Click
 
-Flash 2 click is a mikroBUS™ add-on board for adding more Flash Memory to your target board microcontroller. It carries Microchip’s SST26VF064B flash-memory module with 64 Mbits capacity. It’s a highly reliable module with a specified minimum of 100,000 read and write cycles and with over 100 years of Data Retention. For data security, the module features a One-Time Programmable (OTP) 2 KB bit secure ID and a 64 bit unique, factory pre-programmed identifier. Additional software security measures include inidividual-block write Protection with permanent lock-down capability. Flash 2 click communicates with the target MCU through the mikroBUS™ SPI interface (CS#, SCK, MISO, MOSI) with additional functionality provided by the #HOLD pin (in place of default mikroBUS™ RST pin). The board is designed to use a 3.3V power supply.
+- **CIC Prefix**  : FLASH2
+- **Author**      : MikroE Team
+- **Verison**     : 1.0.0
+- **Date**        : jan 2018.
 
 ---
 
-### Example
+### Software Support
 
-#### Configuration
-* MCU:             STM32F107VC
-* Dev.Board:       EasyMx Pro v7
-* Oscillator:      72 Mhz internal
-* Ext. Modules:    CLICKNAME click
-* SW:              MikroC PRO for ARM 4.7.4
+We provide a library for the Flash_2 Click on our [LibStock](http://libstock.mikroe.com/projects/view/1785/flash-2-click) 
+page, as well as a demo application (example), developed using MikroElektronika 
+[compilers](http://shop.mikroe.com/compilers). The demo can run on all the main 
+MikroElektronika [development boards](http://shop.mikroe.com/development-boards).
 
-```
-#include <stdint.h>
+**Library Description**
 
-/*      Functions
- ****************************/
+The library contains all the necessary functions for working with Flash 2 click.
+
+Key functions :
+
+- ```void flash2_read( uint32_t address, uint8_t *buffer,uint32_t data_count );  ``` -  Function that reads data from selected address 
+- ```void flash2_write( uint32_t address, uint8_t *buffer,  uint32_t data_count );  ``` - Function that writes data to  selected address 
+- ``` void flash2_chipErase( void ); ``` - The chip erase function clears all bits in the device 1.
+
+**Examples Description**
+
+- System Initialization - GPIO and SPI module Initalization 
+- Application Initialization - Flash Driver Initialization, initialization of click by setting mikorBUS to
+  approprieate logic levels, performing global block unlock and chip erase functions.
+- Application Task - Writing data to click memory and displaying the read data via UART.
 
 
-sbit FLASH_2_WP at GPIOA_ODR.B0;
-sbit FLASH_2_CS at GPIOD_ODR.B13;
-sbit FLASH_2_HLD at GPIOC_ODR.B2;
-
-void setup()
+```.c
+void applicationTask()
 {
-
-    GPIO_Digital_Output( &GPIOA_BASE, _GPIO_PINMASK_0 );
-    GPIO_Digital_Output( &GPIOC_BASE, _GPIO_PINMASK_2 );
-    GPIO_Digital_Output( &GPIOD_BASE, _GPIO_PINMASK_13 );
-
-    SPI1_Init_Advanced( _SPI_FPCLK_DIV64,
-                          _SPI_MASTER | _SPI_8_BIT | _SPI_CLK_IDLE_LOW |
-                          _SPI_FIRST_CLK_EDGE_TRANSITION | _SPI_MSB_FIRST |
-                          _SPI_SS_DISABLE | _SPI_SSM_ENABLE |
-                          _SPI_SSI_1,
-                          &_GPIO_MODULE_SPI3_PC10_11_12 );
-
-    Delay_ms(300);
-
-}
-
-
-int main(void)
-{
-    setup();
-
-    flash_2_init();
-    Delay_ms(300);
-    
-    while(1)
-    {}
+   
+    mikrobus_logWrite("Writing MikroE to  Flash memory, from address 0x015015:",_LOG_LINE);
+    flash2_write (0x015015, &wrData[0], 9);
+    mikrobus_logWrite("Reading 9 bytes of Flash memory, from address 0x015015:",_LOG_LINE);
+    flash2_read(0x015015,&rdData[0],9);
+    mikrobus_logWrite("Data read: ",_LOG_TEXT);
+    mikrobus_logWrite(rdData,_LOG_LINE);
+    Delay_ms(1000);
 
 }
 ```
+
+The full application code, and ready to use projects can be found on our 
+[LibStock](http://libstock.mikroe.com/projects/view/1785/flash-2-click) page.
+
+Other mikroE Libraries used in the example:
+
+- SPI
+- UART
+
+**Additional notes and informations**
+
+Depending on the development board you are using, you may need 
+[USB UART click](http://shop.mikroe.com/usb-uart-click), 
+[USB UART 2 Click](http://shop.mikroe.com/usb-uart-2-click) or 
+[RS232 Click](http://shop.mikroe.com/rs232-click) to connect to your PC, for 
+development systems with no UART to USB interface available on the board. The 
+terminal available in all Mikroelektronika 
+[compilers](http://shop.mikroe.com/compilers), or any other terminal application 
+of your choice, can be used to read the message.
+
+---
+### Architectures Supported
+
+#### mikroC
+
+| STM | KIN | CEC | MSP | TIVA | PIC | PIC32 | DSPIC | AVR | FT90x |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| x | x | x | x | x | x | x | x | x | x |
+
+#### mikroBasic
+
+| STM | KIN | CEC | MSP | TIVA | PIC | PIC32 | DSPIC | AVR | FT90x |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| x | x | x | x | x | x | x | x | x | x |
+
+#### mikroPascal
+
+| STM | KIN | CEC | MSP | TIVA | PIC | PIC32 | DSPIC | AVR | FT90x |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| x | x | x | x | x | x | x | x | x | x |
+
+---
+---

@@ -1,0 +1,8 @@
+module Click_Flash_2_config
+
+include Click_Flash_2_types
+
+const
+    _FLASH2_SPI_CFG as uint32_t[3] = (_SPI_MASTER, _SPI_FCY_DIV32, _SPI_CLK_LO_LEADING)
+    
+end.
